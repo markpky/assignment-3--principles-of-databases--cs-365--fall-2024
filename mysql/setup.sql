@@ -6,6 +6,9 @@ SET block_encryption_mode = 'aes-256-cbc';
 SET @key_str = UNHEX(SHA2('my secret passphrase', 256));
 SET @init_vector = RANDOM_BYTES(16);
 
+CREATE USER 'passwords_user'@'localhost';
+GRANT ALL PRIVILEGES ON student_passwords.* TO 'passwords_user'@'localhost';
+
 CREATE TABLE IF NOT EXISTS passwords.people (
   personID smallint(5) NOT NULL,
   firstName varchar(50) NOT NULL,
