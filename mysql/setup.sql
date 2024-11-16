@@ -10,7 +10,7 @@ CREATE USER 'passwords_user'@'localhost';
 GRANT ALL PRIVILEGES ON student_passwords.* TO 'passwords_user'@'localhost';
 
 CREATE TABLE IF NOT EXISTS passwords.people (
-  personID smallint(5) NOT NULL,
+  personID smallint(5) NOT NULL AUTO_INCREMENT,
   firstName varchar(50) NOT NULL,
   lastName varchar(50) NOT NULL,
   email varchar(320) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS passwords.people (
 );
 
 CREATE TABLE IF NOT EXISTS passwords.websites (
-  websiteID smallint(5) NOT NULL,
+  websiteID smallint(5) NOT NULL AUTO_INCREMENT,
   name varchar(50) NOT NULL,
   url varchar(60) NOT NULL,
   comment varchar(60) DEFAULT NULL,
