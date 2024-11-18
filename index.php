@@ -30,6 +30,9 @@
         <label for="password">Password:</label>
         <input required type="password" id="password" name="password"></input>
       </p>
+      <p>
+        <label for="comment">Tell Us About Your Online Self:</label>
+        <textarea id="comment" name="comment" rows=13 cols=13></textarea>
       <p><input type="hidden" name="submitted" value="painis"></p>
       <p><button type="submit">SUBMIT</button></p>
     </fieldset>
