@@ -31,9 +31,9 @@
         <input required type="password" id="password" name="password"></input>
       </p>
       <p>
-        <label for="comment">Tell Us About Your Online Self:</label>
+        <label for="comment">Tell Us About Your Online Self (optional but highly reccommended for the best user experience):</label>
         <textarea id="comment" name="comment" rows=13 cols=13></textarea>
-      <p><input type="hidden" name="submitted" value="painis"></p>
+      <p><input type="hidden" name="submitted" value="CREATE"></p>
       <p><button type="submit">SUBMIT</button></p>
     </fieldset>
   </form>
