@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <form action="helpers.php" method="post">
+  <form action="./includes/helpers.php" method="post">
     <fieldset>
       <legend>CREATE</legend>
       <p>
@@ -30,11 +30,8 @@
         <label for="password">Password:</label>
         <input required type="password" id="password" name="password"></input>
       </p>
-      <p><input type="hidden" name="submitted" value="1"></p>
+      <p><input type="hidden" name="submitted" value="painis"></p>
       <p><button type="submit">SUBMIT</button></p>
-    </fieldset>
-    <fieldset>
-        <legend>TEST</legend>
     </fieldset>
   </form>
 </body>
