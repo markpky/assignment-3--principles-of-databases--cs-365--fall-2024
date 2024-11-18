@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS passwords.people (
   email varchar(320) NOT NULL,
   comment varchar(60) NULL,
   CONSTRAINT people_PK PRIMARY KEY (personID)
+  UNIQUE KEY people_unique (email)
 );
 
 CREATE TABLE IF NOT EXISTS passwords.websites (
