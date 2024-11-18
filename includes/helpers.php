@@ -1,6 +1,6 @@
 <?php
-
-if(isset($_POST['submitted']) && $_POST['submitted'] == "painis") {
-    echo "<p><strong><code>\$_POST[submitted]</code>: {$_POST['submitted']} hurroay</p>";
-    echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
+if(isset($_POST['submitted'])) {
+    echo "<p>You submitted the form. Hurray! Click <a href=\"index.html\">here</a> to go back.</p>";
+} else {
+    echo "<p>The CREATE form from index.php was not submitted. Click <a href=\"index.html\">here</a> to go back.</p>";
 }
