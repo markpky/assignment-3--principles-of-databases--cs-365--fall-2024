@@ -44,6 +44,20 @@ if (isset($_POST['submitted'])) {
         $username = null;
         $personID = null;
     }
+
+    if ($_POST['submitted'] === "CREATE-PERSON") {
+        echo "<p>Looks like you want to create a person there b-</p>";
+        echo "<p>No not a baby! No no no no! Gross!!!</p>";
+
+        if (!valueExistsInAttribute($_POST['email'], "email", "people")) {
+            echo "<p>We can add this email and their person to the database! :)</p>";
+            insertPerson($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['comment']);
+            echo "<p>They're happily existing inside me- I mean the database.</p>";
+        } else {
+            echo "<p>This email already exists in our database! We can't add it! >:(</p>";
+        }
+    }
+
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
     echo "<p>One of the forms from index.php was not submitted. Click <a href=\"../index.php\">here</a> to go back.</p>";
@@ -196,6 +210,34 @@ function insertUser($personID, $websiteID, $username, $password, $comment) {
                 'websiteID' => $websiteID,
                 'username'  => $username,
                 'password'  => $password,
+                'comment'   => $comment
+            )
+        );
+    }
+    catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>getValue</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+function insertPerson($firstName, $lastName, $email, $comment) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        $statement = $db -> prepare("insert into people (firstName, lastName, email, comment)
+            values (:firstName , :lastName , :email , :comment )");
+
+        $statement -> execute(
+            array(
+                'firstName'  => $firstName,
+                'lastName' => $lastName,
+                'email'  => $email,
                 'comment'   => $comment
             )
         );
