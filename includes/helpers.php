@@ -4,23 +4,40 @@ if (isset($_POST['submitted'])) {
 
     if ($_POST['submitted'] === "CREATE-USER") {
         echo "<p>Looks like you want to create a user there big guy...<p>";
+        $websiteID = null;
+        $username = null;
+        $personID = null;
+
         if (valueExistsInAttribute($_POST['url'], "url", "websites")) {
             echo "<p>We found the website! :)<p>";
             $websiteID = getValue("websiteID", "websites", "url", $_POST['url']);
         } else {
             echo "<p>We didn't find the website... :(";
         }
-        if (!valuePairExistsInAttributePair($_POST['username'], $websiteID, "username", "websiteID", "users")) {
+
+        if ($websiteID === null) {
+            echo "<p>Since we couldn't find the website you were looking for, the username might become available once we know about the website! ;)<p>";
+        }
+        else if (!valuePairExistsInAttributePair($_POST['username'], $websiteID, "username", "websiteID", "users")) {
             echo "<p>This username is available! :))<p>";
             $username = $_POST['username'];
         } else {
             echo "<p>That username is already taken... :((<p>";
         }
+
         if (valueExistsInAttribute($_POST['email'], "email", "people")) {
             echo "<p>We found the email! :)))<p>";
             $personID = getValue("personID", "people", "email", $_POST['email']);
         } else {
             echo "<p>We couldn't find that email... :(((<p>";
+        }
+
+        if ($websiteID && $username && $personID) {
+            echo "<p>We can create your user in our database! :D<p>";
+            insertUser($personID, $websiteID, $username, $_POST['password'], $_POST['comment']);
+            echo "<p>They've been created!<p>";
+        } else {
+            echo "<p>We cannot create your user in our database... D:<p>";
         }
 
         $websiteID = null;
@@ -169,6 +186,35 @@ function getValue($value, $table, $query, $pattern) {
         }
 
         return $result;
+    }
+    catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>getValue</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+function insertUser($personID, $websiteID, $username, $password, $comment) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        $statement = $db -> prepare("insert into users (personID, websiteID, username, password, timestamp, comment)
+            values (:personID , :websiteID , :username , :password , NOW() , :comment )");
+
+        $statement -> execute(
+            array(
+                'personID'  => $personID,
+                'websiteID' => $websiteID,
+                'username'  => $username,
+                'password'  => $password,
+                'comment'   => $comment
+            )
+        );
     }
     catch(PDOException $error) {
         echo "<p class='highlight'>The function <code>getValue</code> has " .
