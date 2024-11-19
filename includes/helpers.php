@@ -1,15 +1,22 @@
 <?php
 if (isset($_POST['submitted'])) {
     echo "<p>You submitted the form. Hurray!<p>";
-    if ($_POST['submitted'] == "CREATE-USER") {
+
+    if ($_POST['submitted'] === "CREATE-USER") {
         echo "<p>Looks like you want to create a user there big guy...<p>";
         if (valueExistsInAttribute($_POST['url'], "url", "websites")) {
             echo "<p>We found the website! :)<p>";
             $websiteID = getValue("websiteID", "websites", "url", $_POST['url']);
-            echo $websiteID;
         } else {
             echo "<p>We didn't find the website... :(";
         }
+        if (!valuePairExistsInAttributePair($_POST['username'], $websiteID, "username", "websiteID", "users")) {
+            echo "<p>This username is available! :))<p>";
+            $username = $_POST['username'];
+        } else {
+            echo "<p>That username is already taken... :((<p>";
+        }
+        $websiteID = null;
     }
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
@@ -57,6 +64,53 @@ function valueExistsInAttribute($value, $attribute, $table) {
         $statement = null;
 
         return $found;
+    }
+    catch(PDOException $error) {
+        echo "<p class='highlight'>The function " .
+            "<code>valueExistsInAttribute</code> has generated the " .
+            "following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+/**
+ * Looks for a $value from an $attribute’s column in a $table, returning true if
+ * found, false if not. For example, if a value named “stairway to heaven”
+ * exists under an attribute called “name” within a table called “songs,” then
+ *
+ *    valueExistsInAttribute("stairway to heaven", "name", "songs")
+ *
+ * would return true.
+ *
+ * @param $value      The query I’m interested in finding.
+ * @param $attribute  The attribute under which I would like to locate $value.
+ * @param $table      The table containing the $attribute.
+ *
+ * @access public
+ * @return bool|void
+ */
+function valuePairExistsInAttributePair($value1, $value2, $attribute1, $attribute2, $table) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO(
+            "mysql:host=" . DBHOST . "; dbname=" . DBNAME . ";charset=utf8",
+            DBUSER,
+        );
+
+        $statement = $db -> prepare("SELECT $attribute1, $attribute2 FROM $table WHERE $attribute1=\"$value1\" AND $attribute2=\"$value2\"");
+        $statement -> execute();
+
+        $row = $statement -> fetch();
+        $statement = null;
+
+        if ($row === false)
+            return false;
+        else
+            return true;
     }
     catch(PDOException $error) {
         echo "<p class='highlight'>The function " .
