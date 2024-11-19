@@ -28,7 +28,7 @@
       </p>
       <p>
         <label for="comment">Tell Us About Your Online Self (optional but highly reccommended for the best user experience):</label>
-        <textarea id="comment" name="comment" rows=13 cols=13></textarea>
+        <textarea id="comment" name="comment" rows=2 cols=13></textarea>
       <p><input type="hidden" name="submitted" value="CREATE-USER"></p>
       <p><button type="submit">SUBMIT</button></p>
     </fieldset>
@@ -51,7 +51,7 @@
         </p>
         <p>
           <label for="comment">Tell Us About Your Person (optional but highly reccommended for acknowledging the ego):</label>
-          <textarea id="comment" name="comment" rows=13 cols=13></textarea>
+          <textarea id="comment" name="comment" rows=2 cols=13></textarea>
         </p>
         <p><input type="hidden" name="submitted" value="CREATE-PERSON"></p>
         <p><button type="submit">SUBMIT</button></p>
@@ -71,7 +71,7 @@
       </p>
       <p>
         <label for="comment">Tell Us About Your Website (optional but highly reccommended for understanding your impact on the digital landscape):</label>
-        <textarea id="comment" name="comment" rows=13 cols=13></textarea>
+        <textarea id="comment" name="comment" rows=2 cols=13></textarea>
       </p>
       <p><input type="hidden" name="submitted" value="CREATE-WEBSITE"></p>
       <p><button type="submit">SUBMIT</button></p>
