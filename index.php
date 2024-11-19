@@ -9,11 +9,7 @@
 <body>
   <form action="./includes/helpers.php" method="post">
     <fieldset>
-      <legend>CREATE</legend>
-      <p>
-        <label for="website-name">Website Name:</label>
-        <input required type="text" id="website-name" name="website-name">
-      </p>
+      <legend>CREATE USER</legend>
       <p>
         <label for="url">URL:</label>
         <input required type="url" id="url" name="url">
@@ -33,7 +29,7 @@
       <p>
         <label for="comment">Tell Us About Your Online Self (optional but highly reccommended for the best user experience):</label>
         <textarea id="comment" name="comment" rows=13 cols=13></textarea>
-      <p><input type="hidden" name="submitted" value="CREATE"></p>
+      <p><input type="hidden" name="submitted" value="CREATE-USER"></p>
       <p><button type="submit">SUBMIT</button></p>
     </fieldset>
   </form>

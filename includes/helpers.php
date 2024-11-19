@@ -1,9 +1,15 @@
 <?php
 if (isset($_POST['submitted'])) {
-    if ($_POST['submitted'] == "CREATE") {
+    echo "<p>You submitted the form. Hurray!<p>";
+    if ($_POST['submitted'] == "CREATE-USER") {
         echo "<p>Looks like you want to create a user there big guy...<p>";
+        if (valueExistsInAttribute($_POST['url'], "url", "websites")) {
+            echo "<p>We found the website! :)<p>";
+        } else {
+            echo "<p>We didn't find the website... :(";
+        }
     }
-    echo "<p>You submitted the form. Hurray! Click <a href=\"../index.php\">here</a> to go back.</p>";
+    echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
     echo "<p>One of the forms from index.php was not submitted. Click <a href=\"../index.php\">here</a> to go back.</p>";
 }
