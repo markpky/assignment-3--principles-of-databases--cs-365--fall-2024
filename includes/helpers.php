@@ -5,6 +5,8 @@ if (isset($_POST['submitted'])) {
         echo "<p>Looks like you want to create a user there big guy...<p>";
         if (valueExistsInAttribute($_POST['url'], "url", "websites")) {
             echo "<p>We found the website! :)<p>";
+            $websiteID = getValue("websiteID", "websites", "url", $_POST['url']);
+            echo $websiteID;
         } else {
             echo "<p>We didn't find the website... :(";
         }
@@ -60,6 +62,54 @@ function valueExistsInAttribute($value, $attribute, $table) {
         echo "<p class='highlight'>The function " .
             "<code>valueExistsInAttribute</code> has generated the " .
             "following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+/**
+ * Returns one $value — or the first, if more than one is retrieved — from a
+ * $table if a $query should match a $pattern. For example, imagine you want the
+ * album name from an album table whose artist ID is 2:
+ *
+ *    $album = select("album_name", "album", "artist_id", "2");
+ *
+ * @param $value   The attribute I want to retrieve
+ * @param $table   The table in which the attribute resides
+ * @param $query   The query I want to match
+ * @param $pattern The pattern that the query should match
+ *
+ * @access public
+ * @return false|mixed|void
+ */
+function getValue($value, $table, $query, $pattern) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        $statement = $db ->
+            prepare("SELECT $value FROM $table WHERE $query = :q");
+
+        $statement -> execute(array('q' => $pattern));
+
+        $row = $statement -> fetch();
+
+        $statement = null;
+
+        if ($row === false) {
+            $result = false;
+        } else {
+            $result = $row[$value];
+        }
+
+        return $result;
+    }
+    catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>getValue</code> has " .
+            "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
 
