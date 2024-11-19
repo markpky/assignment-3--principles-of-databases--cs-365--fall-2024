@@ -33,5 +33,29 @@
       <p><button type="submit">SUBMIT</button></p>
     </fieldset>
   </form>
+  <form action="./includes/helpers.php" method="post">
+    <fieldset>
+        <legend>CREATE PERSON</legend>
+        <p>Add a person to our database! We like information about people! :D</p>
+        <p>
+          <label for="firstName">First Name:</label>
+          <input required type="text" id="firstName" name="firstName">
+        </p>
+        <p>
+          <label for="lastName">Last Name:</label>
+          <input required type="text" id="lastName" name="lastName">
+        </p>
+        <p>
+          <label for="email">Email:</label>
+          <input required type="email" id="email" name="email"></input>
+        </p>
+        <p>
+          <label for="comment">Tell Us About Your Person (optional but highly reccommended for acknowledging the ego):</label>
+          <textarea id="comment" name="comment" rows=13 cols=13></textarea>
+        </p>
+        <p><input type="hidden" name="submitted" value="CREATE-PERSON"></p>
+        <p><button type="submit">SUBMIT</button></p>
+      </fieldset>
+  </form>
 </body>
 </html>
