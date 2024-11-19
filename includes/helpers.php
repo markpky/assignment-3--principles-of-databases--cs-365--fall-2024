@@ -16,7 +16,16 @@ if (isset($_POST['submitted'])) {
         } else {
             echo "<p>That username is already taken... :((<p>";
         }
+        if (valueExistsInAttribute($_POST['email'], "email", "people")) {
+            echo "<p>We found the email! :)))<p>";
+            $personID = getValue("personID", "people", "email", $_POST['email']);
+        } else {
+            echo "<p>We couldn't find that email... :(((<p>";
+        }
+
         $websiteID = null;
+        $username = null;
+        $personID = null;
     }
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
