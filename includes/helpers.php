@@ -102,22 +102,6 @@ function valueExistsInAttribute($value, $attribute, $table) {
     }
 }
 
-/**
- * Looks for a $value from an $attribute’s column in a $table, returning true if
- * found, false if not. For example, if a value named “stairway to heaven”
- * exists under an attribute called “name” within a table called “songs,” then
- *
- *    valueExistsInAttribute("stairway to heaven", "name", "songs")
- *
- * would return true.
- *
- * @param $value      The query I’m interested in finding.
- * @param $attribute  The attribute under which I would like to locate $value.
- * @param $table      The table containing the $attribute.
- *
- * @access public
- * @return bool|void
- */
 function valuePairExistsInAttributePair($value1, $value2, $attribute1, $attribute2, $table) {
     try {
         include_once "config.php";
