@@ -58,6 +58,19 @@ if (isset($_POST['submitted'])) {
         }
     }
 
+    if ($_POST['submitted'] === "CREATE-WEBSITE") {
+        echo "<p>Looks like you want to create a website!</p>";
+        echo "<p>But first, let me tell you about today's sponsor \"Squarespace\"! XD</p>";
+
+        if (!valueExistsInAttribute($_POST['url'], "url", "websites")) {
+            echo "<p>We can add this website to the database! :)</p>";
+            insertWebsite($_POST['websiteName'], $_POST['url'], $_POST['comment']);
+            echo "<p>You have shaped landscape of the digital world. To what extent we shall see...</p>";
+        } else {
+            echo "<p>The URL for this website already exists within our database! We can't add it again silly! O 3 O<p>";
+        }
+    }
+
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
     echo "<p>One of the forms from index.php was not submitted. Click <a href=\"../index.php\">here</a> to go back.</p>";
@@ -238,6 +251,33 @@ function insertPerson($firstName, $lastName, $email, $comment) {
                 'firstName'  => $firstName,
                 'lastName' => $lastName,
                 'email'  => $email,
+                'comment'   => $comment
+            )
+        );
+    }
+    catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>getValue</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+function insertWebsite($name, $url, $comment) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        $statement = $db -> prepare("insert into websites (name, url, comment)
+            values (:name , :url , :comment )");
+
+        $statement -> execute(
+            array(
+                'name'  => $name,
+                'url' => $url,
                 'comment'   => $comment
             )
         );

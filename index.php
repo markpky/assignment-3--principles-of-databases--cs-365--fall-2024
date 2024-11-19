@@ -57,5 +57,25 @@
         <p><button type="submit">SUBMIT</button></p>
       </fieldset>
   </form>
+  <form action="./includes/helpers.php" method="post">
+    <fieldset>
+      <legend>CREATE WEBSITE</legend>
+      <p>The internet always needs more websites. What else would you do without them? ;)</p>
+      <p>
+        <label for="websiteName">Website Name:</label>
+        <input required type="text" id="websiteName" name="websiteName"></input>
+      </p>
+      <p>
+        <label for="url">URL:</label>
+        <input required type="url" id="url" name="url">
+      </p>
+      <p>
+        <label for="comment">Tell Us About Your Website (optional but highly reccommended for understanding your impact on the digital landscape):</label>
+        <textarea id="comment" name="comment" rows=13 cols=13></textarea>
+      </p>
+      <p><input type="hidden" name="submitted" value="CREATE-WEBSITE"></p>
+      <p><button type="submit">SUBMIT</button></p>
+    </fieldset>
+  </form>
 </body>
 </html>
