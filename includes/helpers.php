@@ -71,6 +71,12 @@ if (isset($_POST['submitted'])) {
         }
     }
 
+    if ($_POST['submitted'] === "UPDATE-USER") {
+        echo "<p>Attempting to update user...</p>";
+        updateUser($_POST['personID'], $_POST['websiteID'], $_POST['username'], $_POST['attribute'], $_POST['newValue']);
+        echo "<p>Maybe that worked?<p>";
+    }
+
     if ($_POST['submitted'] === "UPDATE-WEBSITE") {
         echo "<p>Attempting to update website...</p>";
         updateTableEntry("websites", "websiteID", $_POST['websiteID'], $_POST['attribute'], $_POST['newValue']);
@@ -512,6 +518,38 @@ function updateTableEntry($table, $idName, $id, $attribute, $newValue) {
 
     } catch(PDOException $error) {
         echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+function updateUser($personID, $websiteID, $username, $attribute, $newValue){
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        $statement = $db -> prepare("UPDATE users SET $attribute = :newValue WHERE personID = :personID AND websiteID = :websiteID AND username = :username");
+
+        $statement -> bindValue(':newValue', $newValue, PDO::PARAM_STR);
+        $statement -> bindValue(':personID', $personID, PDO::PARAM_INT);
+        $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
+        $statement -> bindValue(':username', $username, PDO::PARAM_STR);
+
+        $statement -> execute();
+
+        $statement = $db -> prepare("UPDATE users SET timestamp = NOW() WHERE personID = :personID AND websiteID = :websiteID and username = :username");
+
+        $statement -> bindValue(':personID', $personID, PDO::PARAM_INT);
+        $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
+        $statement -> bindValue(':username', $username, PDO::PARAM_STR);
+
+        $statement -> execute();
+    } catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>updateUser</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";

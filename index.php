@@ -160,6 +160,39 @@
   </form>
   <form action="./includes/helpers.php" method="post">
     <fieldset>
+      <legend>UPDATE USER</legend>
+      <p>Pattern Match:</p>
+      <p>
+        <label for="personID">Person ID:</label>
+        <input required type="number" id="personID" name="personID"></input>
+      </p>
+      <p>
+        <label for="websiteID">Website ID:</label>
+        <input required type="number" id="websiteID" name="websiteID"></input>
+      </p>
+      <p>
+        <label for="username">Username</label>
+        <input required type="text" id="username" name="username"></input>
+      </p>
+      <p>Attributes That Can Be Updated:</p>
+      <p>
+        <label for="password">Password</label>
+        <input type="radio" id="password" name="attribute" value="password"  />
+      </p>
+      <p>
+        <label for="comment">Comment</label>
+        <input type="radio" id="comment" name="attribute" value="comment"  />
+      </p>
+      <p>
+        <label for="newValue">New Value:</label>
+        <textarea required id="newValue" name="newValue" rows=2 cols=13></textarea>
+      </p>
+      <p><input type="hidden" name="submitted" value="UPDATE-USER"></p>
+      <p><button type="submit">UPDATE</button></p>
+    </fieldset>
+  </form>
+  <form action="./includes/helpers.php" method="post">
+    <fieldset>
       <legend>UPDATE PERSON</legend>
       <p>Pattern Match:</p>
       <p>
