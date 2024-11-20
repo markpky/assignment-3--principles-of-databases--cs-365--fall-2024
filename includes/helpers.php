@@ -70,6 +70,19 @@ if (isset($_POST['submitted'])) {
             echo "<p>The URL for this website already exists within our database! We can't add it again silly! O 3 O<p>";
         }
     }
+    echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
+} else {
+    echo "<p>One of the forms from index.php was not submitted. Click <a href=\"../index.php\">here</a> to go back.</p>";
+}
+
+if (isset($_GET['submitted'])) {
+    echo "<p>You submitted a search form. Let's see what I can dig up for you...<p>";
+
+    if ($_GET['submitted'] === "SEARCH-WEBSITES") {
+        echo "<p>Looks like you want to search the websites table. No prob bob!<p>";
+        printWebsites(searchWebsites($_GET['websiteID'], $_GET['websiteName'], $_GET['url'], $_GET['comment']));
+        echo "<p>Hope that helps! :P<p>";
+    }
 
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
@@ -290,4 +303,77 @@ function insertWebsite($name, $url, $comment) {
 
         exit;
     }
+}
+
+function searchWebsites($id, $name, $url, $comment) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        if (!($id && $name && $url && $comment)){
+            $statement = $db -> prepare("SELECT * FROM websites");
+
+            $statement -> execute();
+
+            return $statement;
+        }
+
+        $name = "%".$name."%";
+        $url = "%".$url."%";
+        $comment = "%".$comment."%";
+
+        if ($id) {
+            $statement = $db -> prepare("SELECT websiteID, name, url, comment FROM websites WHERE websiteID = :id AND name LIKE :name AND url LIKE :url AND comment LIKE :comment");
+
+            $statement -> bindValue(':id', $id, PDO::PARAM_INT);
+            $statement -> bindValue(':name', $name, PDO::PARAM_STR);
+            $statement -> bindValue(':url', $url, PDO::PARAM_STR);
+            $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+
+            $statement -> execute();
+
+        } else  {
+            $statement = $db -> prepare("SELECT websiteID, name, url, comment, FROM websites
+            WHERE name LIKE :name AND url LIKE :url AND comment LIKE :comment");
+
+            $statement -> bindValue(':name', $name, PDO::PARAM_STR);
+            $statement -> bindValue(':url', $url, PDO::PARAM_STR);
+            $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+
+            $statement -> execute();
+        }
+
+        return $statement;
+
+    }
+    catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+function printWebsites($statement) {
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>websiteID</th>";
+    echo "<th>name</th>";
+    echo "<th>url</th>";
+    echo "<th>comment</th>";
+    echo "</tr>";
+
+    while ($row = $statement -> fetch()) {
+        echo "<tr>";
+        echo "<td>".$row['websiteID']."</td>";
+        echo "<td>".$row['name']."</td>";
+        echo "<td>".$row['url']."</td>";
+        echo "<td>".$row['comment']."</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
 }

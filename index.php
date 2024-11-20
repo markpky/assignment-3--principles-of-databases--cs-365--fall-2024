@@ -9,7 +9,7 @@
 <body>
   <form action="./includes/helpers.php" method="post">
     <fieldset>
-      <legend>CREATE USER</legend>
+      <legend>INSERT USER</legend>
       <p>
         <label for="url">URL:</label>
         <input required type="url" id="url" name="url">
@@ -35,7 +35,7 @@
   </form>
   <form action="./includes/helpers.php" method="post">
     <fieldset>
-        <legend>CREATE PERSON</legend>
+        <legend>INSERT PERSON</legend>
         <p>Add a person to our database! We like information about people! :D</p>
         <p>
           <label for="firstName">First Name:</label>
@@ -59,7 +59,7 @@
   </form>
   <form action="./includes/helpers.php" method="post">
     <fieldset>
-      <legend>CREATE WEBSITE</legend>
+      <legend>INSERT WEBSITE</legend>
       <p>The internet always needs more websites. What else would you do without them? ;)</p>
       <p>
         <label for="websiteName">Website Name:</label>
@@ -75,6 +75,29 @@
       </p>
       <p><input type="hidden" name="submitted" value="CREATE-WEBSITE"></p>
       <p><button type="submit">SUBMIT</button></p>
+    </fieldset>
+  </form>
+  <form action="./includes/helpers.php" method="get">
+    <fieldset>
+      <legend>SEARCH WEBSITES</legend>
+      <p>
+        <label for="websiteID">ID:</label>
+        <input type="number" id="websiteID" name="websiteID">
+      </p>
+      <p>
+        <label for="websiteName">Name:</label>
+        <input type="text" id="websiteName" name="websiteName">
+      </p>
+      <p>
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url">
+      </p>
+      <p>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" rows=2 cols=13></textarea>
+      </p>
+      <p><input type="hidden" name="submitted" value="SEARCH-WEBSITES"></p>
+      <p><button type="submit">SEARCH</button></p>
     </fieldset>
   </form>
 </body>
