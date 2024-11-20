@@ -70,6 +70,12 @@ if (isset($_POST['submitted'])) {
             echo "<p>The URL for this website already exists within our database! We can't add it again silly! O 3 O<p>";
         }
     }
+
+    if ($_POST['submitted'] === "UPDATE-WEBSITE") {
+        echo "<p>Attempting to update website...</p>";
+        updateWebsite($_POST['websiteID'], $_POST['attribute'], $_POST['newValue']);
+        echo "<p>Maybe that worked?<p>";
+    }
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
     echo "<p>One of the forms from index.php was not submitted. Click <a href=\"../index.php\">here</a> to go back.</p>";
@@ -475,6 +481,29 @@ function searchWebsites($websiteID, $name, $url, $comment) {
 
     }
     catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+function updateWebsite($websiteID, $attribute, $newValue) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        $statement = $db -> prepare("UPDATE websites SET $attribute = :newValue WHERE websiteID=:websiteID");
+
+        $statement -> bindValue(':newValue', $newValue, PDO::PARAM_STR);
+        $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
+
+        $statement -> execute();
+
+    } catch(PDOException $error) {
         echo "<p class='highlight'>The function <code>readWebsites</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .

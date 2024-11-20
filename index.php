@@ -158,5 +158,33 @@
       <p><button type="submit">SEARCH</button></p>
     </fieldset>
   </form>
+  <form action="./includes/helpers.php" method="post">
+    <fieldset>
+      <legend>UPDATE WEBSITE</legend>
+      <p>Pattern Match:</p>
+      <p>
+        <label for="websiteID">Website ID:</label>
+        <input required type="number" id="websiteID" name="websiteID"></input>
+      </p>
+      <p>Attributes That Can Be Updated:</p>
+      <p>
+        <label for="websiteName">Website Name</label>
+        <input type="radio" id="websiteName" name="attribute" value="name"  />
+      </p>
+      <p>
+        <label for="url">URL</label>
+        <input type="radio" id="url" name="attribute" value="url"  />
+      </p>
+      <p>
+        <label for="comment">Comment</label>
+        <input type="radio" id="comment" name="attribute" value="comment"  />
+      </p>
+      <p>
+        <label for="newValue">New Value:</label>
+        <textarea required id="newValue" name="newValue" rows=2 cols=13></textarea>
+      </p>
+      <p><input type="hidden" name="submitted" value="UPDATE-WEBSITE"></p>
+      <p><button type="submit">UPDATE</button></p>
+    </fieldset>
 </body>
 </html>
