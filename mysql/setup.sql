@@ -3,8 +3,7 @@ CREATE DATABASE student_passwords;
 USE student_passwords;
 
 SET block_encryption_mode = 'aes-256-cbc';
-SET @key_str = UNHEX(SHA2('my secret passphrase', 256));
-SET @init_vector = RANDOM_BYTES(16);
+SET @dog = "dog";
 
 DROP USER IF EXISTS 'passwords_user'@'localhost';
 CREATE USER 'passwords_user'@'localhost';

@@ -1,4 +1,29 @@
 <?php
+
+session_start();
+include_once "config.php";
+        $db = new PDO(
+            "mysql:host=" . DBHOST . "; dbname=" . DBNAME . ";charset=utf8",
+            DBUSER,
+        );
+        $statement = $db -> prepare("SET @key_str = UNHEX(SHA2('my secret passphrase', 256));");
+        $statement -> execute();
+        $statement = $db -> prepare("SELECT @key_str");
+        $statement -> execute();
+        $row = $statement -> fetch();
+        $_SESSION['key_str'] = $row['@key_str'];
+
+        $statement = $db -> prepare("SET @init_vector = RANDOM_BYTES(16)");
+        $statement -> execute();
+        $statement = $db -> prepare("SELECT @init_vector");
+        $statement -> execute();
+        $row = $statement -> fetch();
+        $_SESSION['init_vector'] = $row['@init_vector'];
+
+        $row = null;
+        $statement = null;
+        $db = null;
+
 if (isset($_POST['submitted'])) {
     echo "<p>You submitted the form. Hurray!<p>";
 
@@ -274,16 +299,24 @@ function insertUser($personID, $websiteID, $username, $password, $comment) {
 
         $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
 
-        $statement = $db -> prepare("insert into users (personID, websiteID, username, password, timestamp, comment)
-            values (:personID , :websiteID , :username , AES_ENCRYPT(:password, @key_str, @init_vector), NOW() , :comment )");
+        /*
+        $db -> exec("insert into users (personID, websiteID, username, password, timestamp, comment)
+            values (".$personID."," .$websiteID. ",".$username.", AES_ENCRYPT(".$password.", ".$_SESSION['key_str'].", ".$_SESSION['init_vector']."), NOW(),".$comment.")");
+            */
 
-        $statement -> bindValue(':personID', $personID, PDO::PARAM_INT);
-        $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
-        $statement -> bindValue(':username', $username, PDO::PARAM_STR);
-        $statement -> bindValue(':password', $password, PDO::PARAM_STR);
-        $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+        $statement = $db -> prepare("insert into users (personID, websiteID, username, password, timestamp, comment)
+            values (:personID , :websiteID , :username , AES_ENCRYPT(:password, :key_str, :init_vector), NOW() , :comment )");
+
+        $statement -> bindValue(':personID', $personID);
+        $statement -> bindValue(':websiteID', $websiteID);
+        $statement -> bindValue(':username', $username);
+        $statement -> bindValue(':password', $password);
+        $statement -> bindValue(':key_str', $_SESSION['key_str']);
+        $statement -> bindValue(':init_vector', $_SESSION['init_vector']);
+        $statement -> bindValue(':comment', $comment);
 
         $statement -> execute();
+
 
     }
     catch(PDOException $error) {

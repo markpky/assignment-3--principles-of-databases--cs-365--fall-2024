@@ -6,6 +6,20 @@
   <title>Your First Form</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
+<?php
+session_start();
+include_once "./includes/config.php";
+        $db = new PDO(
+            "mysql:host=" . DBHOST . "; dbname=" . DBNAME . ";charset=utf8",
+            DBUSER,
+        );
+        $statement = $db -> prepare("SET @key_str = UNHEX(SHA2('my secret passphrase', 256));");
+        $statement -> execute();
+        $_SESSION['key_str'] = $statement -> fetch();
+        $statement = $db -> prepare("SET @init_vector = RANDOM_BYTES(16)");
+        $statement -> execute();
+        $_SESSION['init_vector'] = $statement -> fetch();
+?>
 <body>
   <form action="./includes/helpers.php" method="post">
     <fieldset>
