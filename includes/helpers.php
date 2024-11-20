@@ -3,41 +3,41 @@ if (isset($_POST['submitted'])) {
     echo "<p>You submitted the form. Hurray!<p>";
 
     if ($_POST['submitted'] === "CREATE-USER") {
-        echo "<p>Looks like you want to create a user there big guy...<p>";
+        echo "<p>Looks like you want to create a user there big guy...</p>";
         $websiteID = null;
         $username = null;
         $personID = null;
 
         if (valueExistsInAttribute($_POST['url'], "url", "websites")) {
-            echo "<p>We found the website! :)<p>";
+            echo "<p>We found the website! :)</p>";
             $websiteID = getValue("websiteID", "websites", "url", $_POST['url']);
         } else {
-            echo "<p>We didn't find the website... :(";
+            echo "<p>We didn't find the website... :(</p>";
         }
 
         if ($websiteID === null) {
-            echo "<p>Since we couldn't find the website you were looking for, the username might become available once we know about the website! ;)<p>";
+            echo "<p>Since we couldn't find the website you were looking for, the username might become available once we know about the website! ;)</p>";
         }
         else if (!valuePairExistsInAttributePair($_POST['username'], $websiteID, "username", "websiteID", "users")) {
-            echo "<p>This username is available! :))<p>";
+            echo "<p>This username is available! :))</p>";
             $username = $_POST['username'];
         } else {
-            echo "<p>That username is already taken... :((<p>";
+            echo "<p>That username is already taken... :((</p>";
         }
 
         if (valueExistsInAttribute($_POST['email'], "email", "people")) {
-            echo "<p>We found the email! :)))<p>";
+            echo "<p>We found the email! :)))</p>";
             $personID = getValue("personID", "people", "email", $_POST['email']);
         } else {
-            echo "<p>We couldn't find that email... :(((<p>";
+            echo "<p>We couldn't find that email... :(((</p>";
         }
 
         if ($websiteID && $username && $personID) {
-            echo "<p>We can create your user in our database! :D<p>";
+            echo "<p>We can create your user in our database! :D</p>";
             insertUser($personID, $websiteID, $username, $_POST['password'], $_POST['comment']);
-            echo "<p>They've been created!<p>";
+            echo "<p>They've been created!</p>";
         } else {
-            echo "<p>We cannot create your user in our database... D:<p>";
+            echo "<p>We cannot create your user in our database... D:</p>";
         }
 
         $websiteID = null;
@@ -67,26 +67,26 @@ if (isset($_POST['submitted'])) {
             insertWebsite($_POST['websiteName'], $_POST['url'], $_POST['comment']);
             echo "<p>You have shaped landscape of the digital world. To what extent we shall see...</p>";
         } else {
-            echo "<p>The URL for this website already exists within our database! We can't add it again silly! O 3 O<p>";
+            echo "<p>The URL for this website already exists within our database! We can't add it again silly! O 3 O</p>";
         }
     }
 
     if ($_POST['submitted'] === "UPDATE-USER") {
         echo "<p>Attempting to update user...</p>";
         updateUser($_POST['personID'], $_POST['websiteID'], $_POST['username'], $_POST['attribute'], $_POST['newValue']);
-        echo "<p>Maybe that worked?<p>";
+        echo "<p>Maybe that worked?</p>";
     }
 
     if ($_POST['submitted'] === "UPDATE-WEBSITE") {
         echo "<p>Attempting to update website...</p>";
         updateTableEntry("websites", "websiteID", $_POST['websiteID'], $_POST['attribute'], $_POST['newValue']);
-        echo "<p>Maybe that worked?<p>";
+        echo "<p>Maybe that worked?</p>";
     }
 
     if ($_POST['submitted'] === "UPDATE-PERSON") {
         echo "<p>Attempting to update person...</p>";
         updateTableEntry("people", "personID", $_POST['personID'], $_POST['attribute'], $_POST['newValue']);
-        echo "<p>Maybe that worked?<p>";
+        echo "<p>Maybe that worked?</p>";
     }
 
     if ($_POST['submitted'] === "DELETE-PERSON/WEBSITE") {
@@ -96,13 +96,13 @@ if (isset($_POST['submitted'])) {
         else
             $idName = "websiteID";
         deleteTableEntry($_POST['table'], $idName, $_POST['ID']);
-        echo "<p>That might have worked?<p>";
+        echo "<p>That might have worked?</p>";
     }
 
     if ($_POST['submitted'] === "DELETE-USER") {
         echo "<p>Looks like you're trying to delete a user...</p>";
         deleteUser($_POST['personID'], $_POST['websiteID'], $_POST['username']);
-        echo "<p>That might have worked?<p>";
+        echo "<p>That might have worked?</p>";
     }
 
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
@@ -111,18 +111,18 @@ if (isset($_POST['submitted'])) {
 }
 
 if (isset($_GET['submitted'])) {
-    echo "<p>You submitted a search form. Let's see what I can dig up for you...<p>";
+    echo "<p>You submitted a search form. Let's see what I can dig up for you...</p>";
 
     if ($_GET['submitted'] === "SEARCH-USERS") {
-        echo "<p>Looks like you want to search the people table. Bob's your uncle!<p>";
+        echo "<p>Looks like you want to search the people table. Bob's your uncle!</p>";
         printUsers(searchUsers($_GET['personID'], $_GET['websiteID'], $_GET['username'], $_GET['password'], $_GET['timestamp'], $_GET['comment']));
-        echo "<p>Hope that helps! :P<p>";
+        echo "<p>Hope that helps! :P</p>";
     }
 
     if ($_GET['submitted'] === "SEARCH-PEOPLE") {
-        echo "<p>Looks like you want to search the people table. Bob's your uncle!<p>";
+        echo "<p>Looks like you want to search the people table. Bob's your uncle!</p>";
         printPeople(searchPeople($_GET['personID'], $_GET['firstName'], $_GET['lastName'], $_GET['email'], $_GET['comment']));
-        echo "<p>Hope that helps! :P<p>";
+        echo "<p>Hope that helps! :P</p>";
     }
 
     if ($_GET['submitted'] === "SEARCH-WEBSITES") {
@@ -211,7 +211,7 @@ function valuePairExistsInAttributePair($value1, $value2, $attribute1, $attribut
     }
     catch(PDOException $error) {
         echo "<p class='highlight'>The function " .
-            "<code>valueExistsInAttribute</code> has generated the " .
+            "<code>valuePairExistsInAttributePair</code> has generated the " .
             "following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
@@ -275,20 +275,19 @@ function insertUser($personID, $websiteID, $username, $password, $comment) {
         $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
 
         $statement = $db -> prepare("insert into users (personID, websiteID, username, password, timestamp, comment)
-            values (:personID , :websiteID , :username , :password , NOW() , :comment )");
+            values (:personID , :websiteID , :username , AES_ENCRYPT(:password, @key_str, @init_vector), NOW() , :comment )");
 
-        $statement -> execute(
-            array(
-                'personID'  => $personID,
-                'websiteID' => $websiteID,
-                'username'  => $username,
-                'password'  => $password,
-                'comment'   => $comment
-            )
-        );
+        $statement -> bindValue(':personID', $personID, PDO::PARAM_INT);
+        $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
+        $statement -> bindValue(':username', $username, PDO::PARAM_STR);
+        $statement -> bindValue(':password', $password, PDO::PARAM_STR);
+        $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+
+        $statement -> execute();
+
     }
     catch(PDOException $error) {
-        echo "<p class='highlight'>The function <code>getValue</code> has " .
+        echo "<p class='highlight'>The function <code>insertUser</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
@@ -316,7 +315,7 @@ function insertPerson($firstName, $lastName, $email, $comment) {
         );
     }
     catch(PDOException $error) {
-        echo "<p class='highlight'>The function <code>getValue</code> has " .
+        echo "<p class='highlight'>The function <code>insertPerson</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
@@ -343,7 +342,7 @@ function insertWebsite($name, $url, $comment) {
         );
     }
     catch(PDOException $error) {
-        echo "<p class='highlight'>The function <code>getValue</code> has " .
+        echo "<p class='highlight'>The function <code>insertWebsite</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
@@ -409,7 +408,7 @@ function searchUsers($personID, $websiteID, $username, $password, $timestamp, $c
         return $statement;
     }
     catch(PDOException $error) {
-        echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+        echo "<p class='highlight'>The function <code>searchUsers</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
@@ -458,7 +457,7 @@ function searchPeople($personID, $firstName, $lastName, $email, $comment) {
         return $statement;
     }
     catch(PDOException $error) {
-        echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+        echo "<p class='highlight'>The function <code>searchPeople</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
@@ -510,7 +509,7 @@ function searchWebsites($websiteID, $name, $url, $comment) {
 
     }
     catch(PDOException $error) {
-        echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+        echo "<p class='highlight'>The function <code>searchWebsites</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
@@ -533,7 +532,7 @@ function updateTableEntry($table, $idName, $id, $attribute, $newValue) {
         $statement -> execute();
 
     } catch(PDOException $error) {
-        echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+        echo "<p class='highlight'>The function <code>updateTableEntry</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
@@ -611,7 +610,7 @@ function deleteUser($personID, $websiteID, $username) {
         $statement -> execute();
 
     } catch(PDOException $error) {
-        echo "<p class='highlight'>The function <code>deleteTableEntry</code> has " .
+        echo "<p class='highlight'>The function <code>deleteUser</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";

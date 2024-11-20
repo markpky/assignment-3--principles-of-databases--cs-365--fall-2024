@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS student_passwords.users (
   personID smallint(5) NOT NULL,
   websiteID smallint(5) NOT NULL,
   username varchar(100) NOT NULL,
-  password varchar(1) NOT NULL,
+  password varbinary(512) NOT NULL,
   timestamp datetime NOT NULL,
   comment varchar(60) DEFAULT NULL,
   PRIMARY KEY (username, websiteID),
