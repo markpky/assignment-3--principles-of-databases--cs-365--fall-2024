@@ -273,5 +273,24 @@
       <p><button type="submit">DELETE</button></p>
     </fieldset>
   </form>
+  <form action="./includes/helpers.php" method="post">
+    <fieldset>
+      <legend>DELETE USER</legend>
+      <p>
+        <label for="personID">Person ID:</label>
+        <input required type="number" id="personID" name="personID"></input>
+      </p>
+      <p>
+        <label for="websiteID">Website ID:</label>
+        <input required type="number" id="websiteID" name="websiteID"></input>
+      </p>
+      <p>
+        <label for="username">Username:</label>
+        <input required type="text" id="username" name="username"></input>
+      </p>
+      <p><input type="hidden" name="submitted" value="DELETE-USER"></p>
+      <p><button type="submit">DELETE</button></p>
+    </fieldset>
+  </form>
 </body>
 </html>
