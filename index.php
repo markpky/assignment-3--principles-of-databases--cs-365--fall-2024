@@ -79,6 +79,37 @@
   </form>
   <form action="./includes/helpers.php" method="get">
     <fieldset>
+      <legend>SEARCH USERS</legend>
+      <p>
+        <label for="personID">Person ID:</label>
+        <input type="number" id="personID" name="personID">
+      </p>
+      <p>
+        <label for="websiteID">Website ID:</label>
+        <input type="number" id="websiteID" name="websiteID">
+      </p>
+      <p>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username">
+      </p>
+      <p>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password">
+      </p>
+      <p>
+        <label for="timestamp">Timestamp:</label>
+        <input type="text" id="timestamp" name="timestamp">
+      </p>
+      <p>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" rows=2 cols=13></textarea>
+      </p>
+      <p><input type="hidden" name="submitted" value="SEARCH-USERS"></p>
+      <p><button type="submit">SEARCH</button></p>
+    </fieldset>
+  </form>
+  <form action="./includes/helpers.php" method="get">
+    <fieldset>
       <legend>SEARCH PEOPLE</legend>
       <p>
         <label for="personID">Person ID:</label>

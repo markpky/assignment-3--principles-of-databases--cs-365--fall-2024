@@ -78,6 +78,12 @@ if (isset($_POST['submitted'])) {
 if (isset($_GET['submitted'])) {
     echo "<p>You submitted a search form. Let's see what I can dig up for you...<p>";
 
+    if ($_GET['submitted'] === "SEARCH-USERS") {
+        echo "<p>Looks like you want to search the people table. Bob's your uncle!<p>";
+        printUsers(searchUsers($_GET['personID'], $_GET['websiteID'], $_GET['username'], $_GET['password'], $_GET['timestamp'], $_GET['comment']));
+        echo "<p>Hope that helps! :P<p>";
+    }
+
     if ($_GET['submitted'] === "SEARCH-PEOPLE") {
         echo "<p>Looks like you want to search the people table. Bob's your uncle!<p>";
         printPeople(searchPeople($_GET['personID'], $_GET['firstName'], $_GET['lastName'], $_GET['email'], $_GET['comment']));
@@ -311,6 +317,72 @@ function insertWebsite($name, $url, $comment) {
     }
 }
 
+function searchUsers($personID, $websiteID, $username, $password, $timestamp, $comment) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        if (!($personID || $websiteID || $username || $password || $timestamp || $comment)){
+            $statement = $db -> prepare("SELECT * FROM users");
+
+            $statement -> execute();
+
+            return $statement;
+        }
+
+        $username = "%".$username."%";
+        $password = "%".$password."%";
+        $timestamp = "%".$timestamp."%";
+        $comment = "%".$comment."%";
+
+        if ($personID && $websiteID) {
+            $statement = $db -> prepare("SELECT * FROM users WHERE personID = :personID AND websiteID = :websiteID AND username LIKE :username AND password LIKE :password AND timestamp LIKE :timestamp AND comment LIKE :comment");
+
+            $statement -> bindValue(':personID', $personID, PDO::PARAM_INT);
+            $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
+            $statement -> bindValue(':username', $username, PDO::PARAM_STR);
+            $statement -> bindValue(':password', $password, PDO::PARAM_STR);
+            $statement -> bindValue(':timestamp', $timestamp, PDO::PARAM_STR);
+            $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+        } elseif ($personID && empty($websiteID)) {
+            $statement = $db -> prepare("SELECT * FROM users WHERE personID = :personID AND username LIKE :username AND password LIKE :password AND timestamp LIKE :timestamp AND comment LIKE :comment");
+
+            $statement -> bindValue(':personID', $personID, PDO::PARAM_INT);
+            $statement -> bindValue(':username', $username, PDO::PARAM_STR);
+            $statement -> bindValue(':password', $password, PDO::PARAM_STR);
+            $statement -> bindValue(':timestamp', $timestamp, PDO::PARAM_STR);
+            $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+        } elseif (empty($personID) && $websiteID) {
+            $statement = $db -> prepare("SELECT * FROM users WHERE websiteID = :websiteID AND username LIKE :username AND password LIKE :password AND timestamp LIKE :timestamp AND comment LIKE :comment");
+
+            $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
+            $statement -> bindValue(':username', $username, PDO::PARAM_STR);
+            $statement -> bindValue(':password', $password, PDO::PARAM_STR);
+            $statement -> bindValue(':timestamp', $timestamp, PDO::PARAM_STR);
+            $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+        } else {
+            $statement = $db -> prepare("SELECT * FROM users WHERE username LIKE :username AND password LIKE :password AND timestamp LIKE :timestamp AND comment LIKE :comment");
+
+            $statement -> bindValue(':username', $username, PDO::PARAM_STR);
+            $statement -> bindValue(':password', $password, PDO::PARAM_STR);
+            $statement -> bindValue(':timestamp', $timestamp, PDO::PARAM_STR);
+            $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+        }
+
+        $statement -> execute();
+        return $statement;
+    }
+    catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
 function searchPeople($personID, $firstName, $lastName, $email, $comment) {
     try {
         include_once "config.php";
@@ -331,7 +403,6 @@ function searchPeople($personID, $firstName, $lastName, $email, $comment) {
         $comment = "%".$comment."%";
 
         if ($personID) {
-            echo "i got here!";
             $statement = $db -> prepare("SELECT * FROM people WHERE personID = :personID AND firstName LIKE :firstName AND lastName LIKE :lastName AND email LIKE :email AND comment LIKE :comment");
 
             $statement -> bindValue(':personID', $personID, PDO::PARAM_INT);
@@ -411,6 +482,31 @@ function searchWebsites($websiteID, $name, $url, $comment) {
 
         exit;
     }
+}
+
+function printUsers($statement) {
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>personID</th>";
+    echo "<th>websiteID</th>";
+    echo "<th>username</th>";
+    echo "<th>password</th>";
+    echo "<th>timestamp</th>";
+    echo "<th>comment</th>";
+    echo "</tr>";
+
+    while ($row = $statement -> fetch()) {
+        echo "<tr>";
+        echo "<td>".$row['personID']."</td>";
+        echo "<td>".$row['websiteID']."</td>";
+        echo "<td>".$row['username']."</td>";
+        echo "<td>".$row['password']."</td>";
+        echo "<td>".$row['timestamp']."</td>";
+        echo "<td>".$row['comment']."</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
 }
 
 function printPeople($statement) {
