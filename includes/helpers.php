@@ -78,6 +78,12 @@ if (isset($_POST['submitted'])) {
 if (isset($_GET['submitted'])) {
     echo "<p>You submitted a search form. Let's see what I can dig up for you...<p>";
 
+    if ($_GET['submitted'] === "SEARCH-PEOPLE") {
+        echo "<p>Looks like you want to search the people table. Bob's your uncle!<p>";
+        printPeople(searchPeople($_GET['personID'], $_GET['firstName'], $_GET['lastName'], $_GET['email'], $_GET['comment']));
+        echo "<p>Hope that helps! :P<p>";
+    }
+
     if ($_GET['submitted'] === "SEARCH-WEBSITES") {
         echo "<p>Looks like you want to search the websites table. No prob bob!<p>";
         printWebsites(searchWebsites($_GET['websiteID'], $_GET['websiteName'], $_GET['url'], $_GET['comment']));
@@ -305,13 +311,63 @@ function insertWebsite($name, $url, $comment) {
     }
 }
 
-function searchWebsites($id, $name, $url, $comment) {
+function searchPeople($personID, $firstName, $lastName, $email, $comment) {
     try {
         include_once "config.php";
 
         $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
 
-        if (!($id && $name && $url && $comment)){
+        if (!($personID || $firstName || $lastName || $email || $comment)){
+            $statement = $db -> prepare("SELECT * FROM people");
+
+            $statement -> execute();
+
+            return $statement;
+        }
+
+        $firstName = "%".$firstName."%";
+        $lastName = "%".$lastName."%";
+        $email = "%".$email."%";
+        $comment = "%".$comment."%";
+
+        if ($personID) {
+            echo "i got here!";
+            $statement = $db -> prepare("SELECT * FROM people WHERE personID = :personID AND firstName LIKE :firstName AND lastName LIKE :lastName AND email LIKE :email AND comment LIKE :comment");
+
+            $statement -> bindValue(':personID', $personID, PDO::PARAM_INT);
+            $statement -> bindValue(':firstName', $firstName, PDO::PARAM_STR);
+            $statement -> bindValue(':lastName', $lastName, PDO::PARAM_STR);
+            $statement -> bindValue(':email', $email, PDO::PARAM_STR);
+            $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+        } else  {
+            $statement = $db -> prepare("SELECT * FROM people WHERE firstName LIKE :firstName AND lastName LIKE :lastName AND email LIKE :email AND comment LIKE :comment");
+
+            $statement -> bindValue(':firstName', $firstName, PDO::PARAM_STR);
+            $statement -> bindValue(':lastName', $lastName, PDO::PARAM_STR);
+            $statement -> bindValue(':email', $email, PDO::PARAM_STR);
+            $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
+        }
+
+        $statement -> execute();
+        return $statement;
+    }
+    catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>readWebsites</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+};
+
+function searchWebsites($websiteID, $name, $url, $comment) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        if (!($websiteID || $name || $url || $comment)){
             $statement = $db -> prepare("SELECT * FROM websites");
 
             $statement -> execute();
@@ -323,10 +379,10 @@ function searchWebsites($id, $name, $url, $comment) {
         $url = "%".$url."%";
         $comment = "%".$comment."%";
 
-        if ($id) {
-            $statement = $db -> prepare("SELECT websiteID, name, url, comment FROM websites WHERE websiteID = :id AND name LIKE :name AND url LIKE :url AND comment LIKE :comment");
+        if ($websiteID) {
+            $statement = $db -> prepare("SELECT websiteID, name, url, comment FROM websites WHERE websiteID = :websiteID AND name LIKE :name AND url LIKE :url AND comment LIKE :comment");
 
-            $statement -> bindValue(':id', $id, PDO::PARAM_INT);
+            $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
             $statement -> bindValue(':name', $name, PDO::PARAM_STR);
             $statement -> bindValue(':url', $url, PDO::PARAM_STR);
             $statement -> bindValue(':comment', $comment, PDO::PARAM_STR);
@@ -355,6 +411,29 @@ function searchWebsites($id, $name, $url, $comment) {
 
         exit;
     }
+}
+
+function printPeople($statement) {
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>personID</th>";
+    echo "<th>firstName</th>";
+    echo "<th>lastName</th>";
+    echo "<th>email</th>";
+    echo "<th>comment</th>";
+    echo "</tr>";
+
+    while ($row = $statement -> fetch()) {
+        echo "<tr>";
+        echo "<td>".$row['personID']."</td>";
+        echo "<td>".$row['firstName']."</td>";
+        echo "<td>".$row['lastName']."</td>";
+        echo "<td>".$row['email']."</td>";
+        echo "<td>".$row['comment']."</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
 }
 
 function printWebsites($statement) {

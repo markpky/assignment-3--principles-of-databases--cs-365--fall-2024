@@ -79,9 +79,36 @@
   </form>
   <form action="./includes/helpers.php" method="get">
     <fieldset>
+      <legend>SEARCH PEOPLE</legend>
+      <p>
+        <label for="personID">Person ID:</label>
+        <input type="number" id="personID" name="personID">
+      </p>
+      <p>
+          <label for="firstName">First Name:</label>
+          <input type="text" id="firstName" name="firstName">
+      </p>
+      <p>
+          <label for="lastName">Last Name:</label>
+          <input type="text" id="lastName" name="lastName">
+      </p>
+      <p>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email">
+      </p>
+      <p>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" rows=2 cols=13></textarea>
+      </p>
+      <p><input type="hidden" name="submitted" value="SEARCH-PEOPLE"></p>
+      <p><button type="submit">SEARCH</button></p>
+    </fieldset>
+  </form>
+  <form action="./includes/helpers.php" method="get">
+    <fieldset>
       <legend>SEARCH WEBSITES</legend>
       <p>
-        <label for="websiteID">ID:</label>
+        <label for="websiteID">Website ID:</label>
         <input type="number" id="websiteID" name="websiteID">
       </p>
       <p>
