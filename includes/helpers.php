@@ -73,9 +73,16 @@ if (isset($_POST['submitted'])) {
 
     if ($_POST['submitted'] === "UPDATE-WEBSITE") {
         echo "<p>Attempting to update website...</p>";
-        updateWebsite($_POST['websiteID'], $_POST['attribute'], $_POST['newValue']);
+        updateTableEntry("websites", "websiteID", $_POST['websiteID'], $_POST['attribute'], $_POST['newValue']);
         echo "<p>Maybe that worked?<p>";
     }
+
+    if ($_POST['submitted'] === "UPDATE-PERSON") {
+        echo "<p>Attempting to update person...</p>";
+        updateTableEntry("people", "personID", $_POST['personID'], $_POST['attribute'], $_POST['newValue']);
+        echo "<p>Maybe that worked?<p>";
+    }
+
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
     echo "<p>One of the forms from index.php was not submitted. Click <a href=\"../index.php\">here</a> to go back.</p>";
@@ -490,16 +497,16 @@ function searchWebsites($websiteID, $name, $url, $comment) {
     }
 }
 
-function updateWebsite($websiteID, $attribute, $newValue) {
+function updateTableEntry($table, $idName, $id, $attribute, $newValue) {
     try {
         include_once "config.php";
 
         $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
 
-        $statement = $db -> prepare("UPDATE websites SET $attribute = :newValue WHERE websiteID=:websiteID");
+        $statement = $db -> prepare("UPDATE $table SET $attribute = :newValue WHERE $idName=:id");
 
         $statement -> bindValue(':newValue', $newValue, PDO::PARAM_STR);
-        $statement -> bindValue(':websiteID', $websiteID, PDO::PARAM_INT);
+        $statement -> bindValue(':id', $id, PDO::PARAM_INT);
 
         $statement -> execute();
 
