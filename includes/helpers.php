@@ -106,11 +106,7 @@ if (isset($_POST['submitted'])) {
     }
 
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
-} else {
-    echo "<p>One of the forms from index.php was not submitted. Click <a href=\"../index.php\">here</a> to go back.</p>";
-}
-
-if (isset($_GET['submitted'])) {
+} elseif (isset($_GET['submitted'])) {
     echo "<p>You submitted a search form. Let's see what I can dig up for you...</p>";
 
     if ($_GET['submitted'] === "SEARCH-USERS") {
