@@ -253,5 +253,25 @@
       <p><button type="submit">UPDATE</button></p>
     </fieldset>
   </form>
+  <form action="./includes/helpers.php" method="post">
+    <fieldset>
+      <legend>DELETE PERSON/WEBSITE</legend>
+      <p>Table Selection:</p>
+      <p>
+        <label for="people">People</label>
+        <input type="radio" id="people" name="table" value="people"  />
+      </p>
+      <p>
+        <label for="websites">Websites</label>
+        <input type="radio" id="websites" name="table" value="websites"  />
+      </p>
+      <p>
+        <label for="id">ID:</label>
+        <input required type="number" id="ID" name="ID"></input>
+      </p>
+      <p><input type="hidden" name="submitted" value="DELETE-PERSON/WEBSITE"></p>
+      <p><button type="submit">DELETE</button></p>
+    </fieldset>
+  </form>
 </body>
 </html>

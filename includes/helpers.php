@@ -89,6 +89,16 @@ if (isset($_POST['submitted'])) {
         echo "<p>Maybe that worked?<p>";
     }
 
+    if ($_POST['submitted'] === "DELETE-PERSON/WEBSITE") {
+        echo "<p>Looks like you're trying to delete either a person a website...</p>";
+        if ($_POST['table'] === "people")
+            $idName = "personID";
+        else
+            $idName = "websiteID";
+        deleteTableEntry($_POST['table'], $idName, $_POST['ID']);
+        echo "<p>That might have worked?<p>";
+    }
+
     echo "<p>Click <a href=\"../index.php\">here</a> to go back.</p>";
 } else {
     echo "<p>One of the forms from index.php was not submitted. Click <a href=\"../index.php\">here</a> to go back.</p>";
@@ -550,6 +560,28 @@ function updateUser($personID, $websiteID, $username, $attribute, $newValue){
         $statement -> execute();
     } catch(PDOException $error) {
         echo "<p class='highlight'>The function <code>updateUser</code> has " .
+            "generated the following error:</p>" .
+            "<pre>$error</pre>" .
+            "<p class='highlight'>Exiting…</p>";
+
+        exit;
+    }
+}
+
+function deleteTableEntry($table, $idName, $id) {
+    try {
+        include_once "config.php";
+
+        $db = new PDO("mysql:host=".DBHOST."; dbname=".DBNAME, DBUSER);
+
+        $statement = $db -> prepare("DELETE FROM $table WHERE $idName=:id");
+
+        $statement -> bindValue(':id', $id, PDO::PARAM_INT);
+
+        $statement -> execute();
+
+    } catch(PDOException $error) {
+        echo "<p class='highlight'>The function <code>deleteTableEntry</code> has " .
             "generated the following error:</p>" .
             "<pre>$error</pre>" .
             "<p class='highlight'>Exiting…</p>";
