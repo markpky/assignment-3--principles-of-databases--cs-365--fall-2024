@@ -2,9 +2,6 @@ DROP DATABASE IF EXISTS student_passwords;
 CREATE DATABASE student_passwords;
 USE student_passwords;
 
-SET block_encryption_mode = 'aes-256-cbc';
-SET @dog = "dog";
-
 DROP USER IF EXISTS 'passwords_user'@'localhost';
 CREATE USER 'passwords_user'@'localhost';
 GRANT ALL PRIVILEGES ON student_passwords.* TO 'passwords_user'@'localhost';
@@ -32,7 +29,7 @@ CREATE TABLE IF NOT EXISTS student_passwords.users (
   personID smallint(5) NOT NULL,
   websiteID smallint(5) NOT NULL,
   username varchar(100) NOT NULL,
-  password varbinary(512) NOT NULL,
+  password varchar(30) NOT NULL,
   timestamp datetime NOT NULL,
   comment varchar(60) DEFAULT NULL,
   PRIMARY KEY (username, websiteID),
